@@ -159,6 +159,21 @@ def main():
 
     args = parser.parse_args()
 
+    if args.image_type_to_process == 'photo':
+        if args.photo_image_source_path is None or args.photo_image_save_path is None:
+            parser.error('--photo_image_source_path and --photo_image_save_path required.')
+        elif not os.path.isdir(args.photo_image_source_path) or not os.path.isdir(args.photo_image_save_path):
+            parser.error('--photo_image_source_path and --photo_image_save_path must be existing directories.')
+        else:
+            preprocess_photo_images(args.photo_image_source_path, args.photo_image_save_path, target_size=args.target_size)
+
+    elif args.image_type_to_process == 'animation':
+        if args.animation_image_source_path is None or args.animation_image_save_path is None or args.animation_edge_smoothed_save_path is None:
+            parser.error('--animation_image_source_path, --animation_image_save_path and --animation_edge_smoothed_save_path is required.')
+        elif not os.path.isdir(args.animation_image_source_path) or not os.path.isdir(args.animation_image_save_path) or not os.path.isdir(args.animation_edge_smoothed_save_path):
+            parser.error('--animation_image_source_path, --animation_image_save_path and --animation_edge_smoothed_save_path must be existing directories.')
+        else:
+            preprocess_animation_images(args.animation_image_source_path, args.animation_image_save_path, args.animation_edge_smoothed_save_path, target_size=args.target_size)
 
 if __name__ == '__main__':
 
