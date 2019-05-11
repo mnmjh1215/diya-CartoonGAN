@@ -37,7 +37,7 @@ def preprocess_photo_images(source_path, save_path, target_size=256):
             continue
     
         new_image = resize_and_crop(image)
-        image_name = image_path.split('/')[-1]  # ex. images/1.jpg -> 1.jpg
+        image_name = (image_path.split('/')[-1]).split('\\')[-1]  # ex. images/1.jpg -> 1.jpg
         new_image_path = os.path.join(save_path, image_name)
 
         new_image.save(new_image_path)
@@ -73,7 +73,7 @@ def preprocess_animation_images(source_path, save_path, save_smoothed_path, targ
             continue
     
         new_image = resize_and_crop(image)
-        image_name = image_path.split('/')[-1]  # ex. images/1.jpg -> 1.jpg
+        image_name = (image_path.split('/')[-1]).split('\\')[-1]  # ex. images/1.jpg -> 1.jpg
         new_image_path = os.path.join(save_path, image_name)
         new_image.save(new_image_path)
 
