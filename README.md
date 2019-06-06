@@ -1,5 +1,10 @@
-# Re-implementation of [CartoonGAN](http://openaccess.thecvf.com/content_cvpr_2018/papers/Chen_CartoonGAN_Generative_Adversarial_CVPR_2018_paper.pdf)
+# [CartoonGAN](http://openaccess.thecvf.com/content_cvpr_2018/papers/Chen_CartoonGAN_Generative_Adversarial_CVPR_2018_paper.pdf)
 
-Working project for DIYA Meet-up by Computer Vision 2019 team.
+Working project by Computer Vision team for DIYA Meet-up.
 
-Goal of the project is to re-implement CartoonGAN with new data set and (hopefully) to improve CartoonGAN model.
+Goals of the project are:
+
+1. Implement CartoonGAN and test with new data
+2. Compare CartoonGAN with other models, such as CycleGAN
+3. Improve CartoonGAN
+
