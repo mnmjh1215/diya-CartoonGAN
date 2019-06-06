@@ -57,6 +57,8 @@ class CartoonGANTrainer:
                 epoch_loss = 0
 
                 for ix, (photo_images, _) in enumerate(self.photo_image_loader, 0):
+                    photo_images = photo_images.to(Config.device)
+
                     loss = self.initialize_step(photo_images)
                     self.init_loss_hist.append(loss)
                     epoch_loss += loss
@@ -82,6 +84,10 @@ class CartoonGANTrainer:
                         self.edge_smmothed_image_loader,
                         self.photo_image_loader)):
                 # do train_step...!
+                animation_images = animation_images.to(Config.device)
+                edge_smoothed_images = edge_smoothed_images.to(Config.device)
+                photo_images = photo_images.to(Config.device)
+                
                 loss_D, loss_G, loss_content = self.train_step(animation_images, edge_smoothed_images, photo_images)
                 epoch_loss_D += loss_D
                 epoch_loss_G += loss_G
