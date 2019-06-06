@@ -49,6 +49,9 @@ def main():
 
     if args.test:
         assert args.model_path
+        print('Testing...')
+
+        print('Loading model...')
         load_model(generator, discriminator, args.model_path)
         # Do testing stuff
         # ex. generate image, compute fid score
@@ -81,7 +84,8 @@ def main():
         plt.show()
 
 
-
+if __name__ == '__main__':
+    main()
 
 
 
