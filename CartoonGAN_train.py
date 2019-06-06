@@ -118,7 +118,9 @@ class CartoonGANTrainer:
         return self.loss_D_hist, self.loss_G_hist, self.loss_content_hist
 
     def train_step(self, animation_images, edge_smoothed_images, photo_images):
-        # TODO
+        self.discriminator.zero_grad()
+        self.generator.zero_grad()
+
         loss_D = 0
         loss_G = 0
         loss_content = 0
@@ -127,7 +129,6 @@ class CartoonGANTrainer:
         generated_images = self.generator(photo_images)
 
         # 1. Train Discriminator
-        self.discriminator.zero_grad()
         # 1-1. Train Discriminator using animation images
         animation_disc_output = self.discriminator(animation_images)
         animation_target = torch.ones_like(animation_disc_output)
@@ -174,7 +175,6 @@ class CartoonGANTrainer:
         return loss_D, loss_G, loss_content
 
     def initialize_step(self, photo_images):
-        # TODO
         self.generator.zero_grad()
         x_features = self.feature_extractor((photo_images + 1) / 2).detach()  # move [-1, 1] to [0, 1]
         Gx = self.generator(photo_images)
