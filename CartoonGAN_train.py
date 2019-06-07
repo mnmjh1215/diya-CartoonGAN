@@ -125,9 +125,6 @@ class CartoonGANTrainer:
         loss_G = 0
         loss_content = 0
 
-        # 0. Generate fake image using photo_images
-        generated_images = self.generator(photo_images)
-
         # 1. Train Discriminator
         # 1-1. Train Discriminator using animation images
         animation_disc_output = self.discriminator(animation_images)
@@ -144,6 +141,8 @@ class CartoonGANTrainer:
         loss_D += loss_animation.item()
 
         # 1-3. Train Discriminator using generated images
+        generated_images = self.generator(photo_images)
+
         generated_output = self.discriminator(generated_images)
         generated_target = torch.zeros_like(generated_output)
         loss_generated = self.disc_criterion(generated_output, generated_target)
@@ -156,6 +155,8 @@ class CartoonGANTrainer:
         self.generator.zero_grad()
 
         # 2-1. Train Generator using adversarial loss, using generated images
+        generated_images = self.generator(photo_images)
+        
         generated_output = self.discriminator(generated_images)
         generated_target = torch.ones_like(generated_output)
         loss_generated = self.gen_criterion_gan(generated_output, generated_target)
