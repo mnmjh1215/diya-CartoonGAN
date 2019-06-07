@@ -8,6 +8,7 @@ from dataloader import load_image_dataloader
 import torch
 import matplotlib.pyplot as plt
 import argparse
+import torchvision.utils as tvutils
 
 
 def get_args():
@@ -35,6 +36,13 @@ def load_model(generator, discriminator, checkpoint_path):
     discriminator.load_state_dict(checkpoint['discriminator_state_dict'])
 
 
+def generate_and_save_images(generator, test_image_loader, save_path):
+    # TODO
+    # for each image in test_image_loader, generate image and save
+    generator.eval()
+    pass
+
+
 def main():
 
     args = get_args()
@@ -42,21 +50,31 @@ def main():
     device = Config.device
     print("PyTorch running with device {0}".format(device))
 
-    print("Loading models...")
+    print("Creating models...")
     generator = Generator().to(device)
     discriminator = Discriminator().to(device)
     feature_extractor = FeatureExtractor().to(device)
 
     if args.test:
-        assert args.model_path
+        assert args.model_path, 'model_path must be provided for testing'
         print('Testing...')
+        generator.eval()
 
-        print('Loading model...')
+        print('Loading models')
         load_model(generator, discriminator, args.model_path)
         # Do testing stuff
         # ex. generate image, compute fid score
 
-        test_images = load_image_dataloader(root_dir=args.test_image_path)
+        test_images = load_image_dataloader(root_dir=args.test_image_path, batch_size=Config.device * 2, shuffle=False)
+
+        image_batch = next(iter(test_images))
+        new_images = generator(image_batch)
+
+        tvutils.save_image(image_batch, 'test_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
+        tvutils.save_image(new_images, 'generated_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
+
+        # TODO
+        # Compute FID score
 
     else:
         print("Training...")
