@@ -141,7 +141,7 @@ class CartoonGANTrainer:
         loss_D += loss_animation.item()
 
         # 1-3. Train Discriminator using generated images
-        generated_images = self.generator(photo_images).detach()
+        generated_images = self.generator(photo_images)
 
         generated_output = self.discriminator(generated_images)
         generated_target = torch.zeros_like(generated_output)
@@ -159,9 +159,9 @@ class CartoonGANTrainer:
 
         generated_output = self.discriminator(generated_images)
         generated_target = torch.ones_like(generated_output)
-        loss_generated = self.gen_criterion_gan(generated_output, generated_target)
-        loss_generated.backward()
-        loss_G += loss_generated.item()
+        loss_adv = self.gen_criterion_gan(generated_output, generated_target)
+        loss_adv.backward(retain_graph=True)
+        loss_G += loss_adv.item()
 
         # 2-2. Train Generator using content loss
         x_features = self.feature_extractor((photo_images + 1) / 2).detach()
