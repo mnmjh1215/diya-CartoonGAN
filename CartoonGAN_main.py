@@ -77,8 +77,10 @@ def main():
 
         test_images = load_image_dataloader(root_dir=args.test_image_path, batch_size=Config.batch_size * 2, shuffle=False)
 
-        image_batch = next(iter(test_images))
-        new_images = generator(image_batch)
+        image_batch, _ = next(iter(test_images))
+        image_batch = image_batch.to(Config.device)
+
+        new_images = generator(image_batch).detach().cpu()
 
         tvutils.save_image(image_batch, 'test_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
         tvutils.save_image(new_images, 'generated_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
