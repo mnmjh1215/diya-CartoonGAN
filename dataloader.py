@@ -15,7 +15,7 @@ transform = transforms.Compose([
 ])
 
 
-def load_image_dataloader(root_dir, batch_size=Config.batch_size, num_workers=Config.num_workers):
+def load_image_dataloader(root_dir, batch_size=Config.batch_size, num_workers=Config.num_workers, shuffle=True):
     """
     :param root_dir: directory that contains another directory of images. All images should be under root_dir/<some_dir>/
     :param batch_size: batch size
@@ -27,7 +27,7 @@ def load_image_dataloader(root_dir, batch_size=Config.batch_size, num_workers=Co
     image_dataset = datasets.ImageFolder(root=root_dir, transform=transform)
 
     dataloader = DataLoader(image_dataset,
-                            shuffle=True,
+                            shuffle=shuffle,
                             batch_size=batch_size,
                             num_workers=num_workers)
 
@@ -37,4 +37,4 @@ def load_image_dataloader(root_dir, batch_size=Config.batch_size, num_workers=Co
 # photo_images = load_image_dataloader(root_dir=Config.photo_image_dir)
 # animation_images = load_image_dataloader(root_dir=Config.animation_image_dir)
 # edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir)
-# test_photo_images = load_image_dataloader(root_dir=Config.test_photo_image_dir)
+# test_photo_images = load_image_dataloader(root_dir=Config.test_photo_image_dir, shuffle=False)
