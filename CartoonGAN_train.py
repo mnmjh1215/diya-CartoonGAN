@@ -130,15 +130,11 @@ class CartoonGANTrainer:
         animation_disc_output = self.discriminator(animation_images)
         animation_target = torch.ones_like(animation_disc_output)
         loss_real = self.disc_criterion(animation_disc_output, animation_target)
-        loss_real.backward()
-        loss_D += loss_real.item()
 
         # 1-2. Train Discriminator using edge smoothed images
         edge_smoothed_disc_output = self.discriminator(edge_smoothed_images)
         edge_smoothed_target = torch.zeros_like(edge_smoothed_disc_output)
-        loss_animation = self.disc_criterion(edge_smoothed_disc_output, edge_smoothed_target)
-        loss_animation.backward()
-        loss_D += loss_animation.item()
+        loss_edge = self.disc_criterion(edge_smoothed_disc_output, edge_smoothed_target)
 
         # 1-3. Train Discriminator using generated images
         generated_images = self.generator(photo_images).detach()
@@ -146,10 +142,11 @@ class CartoonGANTrainer:
         generated_output = self.discriminator(generated_images)
         generated_target = torch.zeros_like(generated_output)
         loss_generated = self.disc_criterion(generated_output, generated_target)
-        loss_generated.backward()
-        loss_D += loss_generated.item()
 
-        loss_D = loss_D / 3  # average of loss_real, loss_animation and loss_generated
+        loss_disc = loss_real + loss_edge + loss_generated
+
+        loss_disc.backward()
+        loss_D = loss_disc.item()
 
         self.disc_optimizer.step()
 
@@ -162,15 +159,17 @@ class CartoonGANTrainer:
         generated_output = self.discriminator(generated_images)
         generated_target = torch.ones_like(generated_output)
         loss_adv = self.gen_criterion_gan(generated_output, generated_target)
-        loss_adv.backward(retain_graph=True)
-        loss_G += loss_adv.item()
 
         # 2-2. Train Generator using content loss
         x_features = self.feature_extractor((photo_images + 1) / 2).detach()
         Gx_features = self.feature_extractor((generated_images + 1) / 2)
 
         loss_content = self.content_loss_weight * self.gen_criterion_content(Gx_features, x_features)
-        loss_content.backward()
+
+        loss_gen = loss_adv + loss_content
+        loss_gen.backward()
+
+        loss_G = loss_adv.item()
         loss_content = loss_content.item()
 
         self.gen_optimizer.step()
