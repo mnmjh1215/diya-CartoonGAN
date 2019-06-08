@@ -25,6 +25,16 @@ def get_args():
                         default=Config.test_photo_image_dir,
                         help='Path to test photo images')
 
+    parser.add_argument('--initialization_epochs',
+                        type=int,
+                        default=Config.initialization_epochs,
+                        help='Number of epochs for initialization phase')
+
+    parser.add_argument('--num_epochs',
+                        type=int,
+                        default=Config.num_epochs,
+                        help='Number of training epochs')
+
     args = parser.parse_args()
 
     return args
@@ -65,7 +75,7 @@ def main():
         # Do testing stuff
         # ex. generate image, compute fid score
 
-        test_images = load_image_dataloader(root_dir=args.test_image_path, batch_size=Config.device * 2, shuffle=False)
+        test_images = load_image_dataloader(root_dir=args.test_image_path, batch_size=Config.batch_size * 2, shuffle=False)
 
         image_batch = next(iter(test_images))
         new_images = generator(image_batch)
@@ -91,8 +101,8 @@ def main():
             trainer.load_checkpoint(args.model_path)
 
         print('Start Training...')
-        loss_D_hist, loss_G_hist, loss_content_hist = trainer.train(num_epochs=Config.num_epochs,
-                                                                    initialization_epochs=Config.initialization_epochs)
+        loss_D_hist, loss_G_hist, loss_content_hist = trainer.train(num_epochs=args.num_epochs,
+                                                                    initialization_epochs=args.initialization_epochs)
 
         plt.plot(loss_D_hist, label='Discriminator loss')
         plt.plot(loss_G_hist, label='Generator loss')

@@ -141,13 +141,15 @@ class CartoonGANTrainer:
         loss_D += loss_animation.item()
 
         # 1-3. Train Discriminator using generated images
-        generated_images = self.generator(photo_images)
+        generated_images = self.generator(photo_images).detach()
 
         generated_output = self.discriminator(generated_images)
         generated_target = torch.zeros_like(generated_output)
         loss_generated = self.disc_criterion(generated_output, generated_target)
         loss_generated.backward()
         loss_D += loss_generated.item()
+
+        loss_D = loss_D / 3  # average of loss_real, loss_animation and loss_generated
 
         self.disc_optimizer.step()
 
