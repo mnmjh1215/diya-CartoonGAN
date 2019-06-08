@@ -195,7 +195,8 @@ class CartoonGANTrainer:
             'discriminator_state_dict': self.discriminator.state_dict(),
             'gen_optimizer_state_dict': self.gen_optimizer.state_dict(),
             'disc_optimizer_state_dict': self.disc_optimizer.state_dict(),
-            'epoch': self.curr_epoch,
+            'curr_epoch': self.curr_epoch,
+            'curr_initialization_epoch': self.curr_initialization_epoch,
             'loss_G_hist': self.loss_G_hist,
             'loss_D_hist': self.loss_D_hist,
             'loss_content_hist': self.loss_content_hist
@@ -211,3 +212,5 @@ class CartoonGANTrainer:
         self.loss_G_hist = checkpoint['loss_G_hist']
         self.loss_D_hist = checkpoint['loss_D_hist']
         self.loss_content_hist = checkpoint['loss_content_hist']
+        self.curr_epoch = checkpoint['curr_epoch']
+        self.curr_initialization_epoch = checkpoint['curr_initialization_epoch']
