@@ -207,7 +207,6 @@ class CartoonGANTrainer:
         self.discriminator.load_state_dict(checkpoint['discriminator_state_dict'])
         self.gen_optimizer.load_state_dict(checkpoint['gen_optimizer_state_dict'])
         self.disc_optimizer.load_state_dict(checkpoint['disc_optimizer_state_dict'])
-        self.curr_epoch = checkpoint['epoch']
         self.loss_G_hist = checkpoint['loss_G_hist']
         self.loss_D_hist = checkpoint['loss_D_hist']
         self.loss_content_hist = checkpoint['loss_content_hist']
