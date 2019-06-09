@@ -16,7 +16,7 @@ HOW TO USE:
 
 python FID_SOCRE.py [img_data_source_path_1] [img_data_source_path_2] --batch-size [batch_size] --dims [dims] 
 if you want to use GPU add 
---gpu 1
+--gpu 0
 
 
 """
