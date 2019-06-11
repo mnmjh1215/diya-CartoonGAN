@@ -59,13 +59,15 @@ def generate_and_save_images(generator, test_image_loader, save_path):
 
     image_ix = 0
     for test_images, _ in test_image_loader:
+        test_images = test_images.to(Config.device)
         generated_images = generator(test_images).detach().cpu()
+
         for i in range(len(generated_images)):
             image = generated_images[i]
             image = torch_to_image(image)
             image.save(os.path.join(save_path, '{0}.jpg'.format(image_ix)))
             image_ix += 1
-    pass
+
 
 
 def main():
