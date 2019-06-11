@@ -9,6 +9,8 @@ import torch
 import matplotlib.pyplot as plt
 import argparse
 import torchvision.utils as tvutils
+import os
+from torchvision import transforms
 
 
 def get_args():
@@ -50,6 +52,19 @@ def generate_and_save_images(generator, test_image_loader, save_path):
     # TODO
     # for each image in test_image_loader, generate image and save
     generator.eval()
+    torch_to_image = transforms.Compose([
+        transforms.Normalize(mean=(-1, -1, -1), std=(2, 2, 2)),  # [-1, 1] to [0, 1]
+        transforms.ToPILImage()
+    ])
+
+    image_ix = 0
+    for test_images, _ in test_image_loader:
+        generated_images = generator(test_images).detach().cpu()
+        for i in range(len(generated_images)):
+            image = generated_images[i]
+            image = torch_to_image(image)
+            image.save(os.path.join(save_path, '{0}.jpg'.format(image_ix)))
+            image_ix += 1
     pass
 
 
@@ -86,7 +101,11 @@ def main():
         tvutils.save_image(new_images, 'generated_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
 
         # TODO
-        # Compute FID score
+        if not os.path.isdir('generated_images'):
+            os.mkdir('generated_images')
+        if not os.path.isdir('generated_images/CartoonGAN'):
+            os.mkdir('generated_images/CartoonGAN/')
+        generate_and_save_images(generator, test_images, 'generated_images/CartoonGAN/')
 
     else:
         print("Training...")
