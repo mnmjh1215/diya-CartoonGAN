@@ -69,7 +69,6 @@ def generate_and_save_images(generator, test_image_loader, save_path):
             image_ix += 1
 
 
-
 def main():
 
     args = get_args()
@@ -79,8 +78,10 @@ def main():
 
     print("Creating models...")
     generator = Generator().to(device)
-    discriminator = Discriminator().to(device)
-    feature_extractor = FeatureExtractor().to(device)
+    if not args.test:
+        # discriminator and feature extractor are required for training.
+        discriminator = Discriminator().to(device)
+        feature_extractor = FeatureExtractor().to(device)
 
     if args.test:
         assert args.model_path, 'model_path must be provided for testing'
