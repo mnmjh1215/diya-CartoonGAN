@@ -78,9 +78,9 @@ def main():
 
     print("Creating models...")
     generator = Generator().to(device)
+    discriminator = Discriminator().to(device)
     if not args.test:
-        # discriminator and feature extractor are required for training.
-        discriminator = Discriminator().to(device)
+        # feature extractor is not required for testing.
         feature_extractor = FeatureExtractor().to(device)
 
     if args.test:
