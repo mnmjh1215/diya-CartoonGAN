@@ -4,7 +4,7 @@
 import os
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
-from config import Config
+from config import CartoonGANConfig as Config
 
 # transforms that will be applied to all datasets
 transform = transforms.Compose([
