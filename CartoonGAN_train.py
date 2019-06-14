@@ -3,7 +3,7 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from config import Config
+from config import CartoonGANConfig as Config
 
 
 class CartoonGANTrainer:
@@ -27,7 +27,7 @@ class CartoonGANTrainer:
 
         self.photo_image_loader = photo_image_loader
         self.animation_image_loader = animation_image_loader
-        self.edge_smmothed_image_loader = edge_smoothed_image_loader
+        self.edge_smoothed_image_loader = edge_smoothed_image_loader
 
         self.gen_optimizer = optim.Adam(self.generator.parameters(), lr=Config.lr, betas=(Config.adam_beta1, 0.999))
         self.disc_optimizer = optim.Adam(self.discriminator.parameters(), lr=Config.lr,
@@ -81,7 +81,7 @@ class CartoonGANTrainer:
 
             for ix, ((animation_images, _), (edge_smoothed_images, _), (photo_images, _)) in enumerate(
                     zip(self.animation_image_loader,
-                        self.edge_smmothed_image_loader,
+                        self.edge_smoothed_image_loader,
                         self.photo_image_loader)):
                 # do train_step...!
                 animation_images = animation_images.to(Config.device)

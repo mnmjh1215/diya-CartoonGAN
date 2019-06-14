@@ -2,7 +2,7 @@
 
 from CartoonGAN_model import Generator, Discriminator, FeatureExtractor
 from CartoonGAN_train import CartoonGANTrainer
-from config import Config
+from config import CartoonGANConfig as Config
 from dataloader import load_image_dataloader
 
 import torch
@@ -79,16 +79,13 @@ def main():
     print("Creating models...")
     generator = Generator().to(device)
     discriminator = Discriminator().to(device)
-    if not args.test:
-        # feature extractor is not required for testing.
-        feature_extractor = FeatureExtractor().to(device)
 
     if args.test:
         assert args.model_path, 'model_path must be provided for testing'
         print('Testing...')
         generator.eval()
 
-        print('Loading models')
+        print('Loading models...')
         load_model(generator, discriminator, args.model_path)
         # Do testing stuff
         # ex. generate image, compute fid score
@@ -103,7 +100,6 @@ def main():
         tvutils.save_image(image_batch, 'test_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
         tvutils.save_image(new_images, 'generated_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
 
-        # TODO
         if not os.path.isdir('generated_images'):
             os.mkdir('generated_images')
         if not os.path.isdir('generated_images/CartoonGAN'):
@@ -113,10 +109,13 @@ def main():
     else:
         print("Training...")
 
+        print("Loading Feature Extractor...")
+        feature_extractor = FeatureExtractor().to(device)
+
         # load dataloaders
-        photo_images = load_image_dataloader(root_dir=Config.photo_image_dir)
-        animation_images = load_image_dataloader(root_dir=Config.animation_image_dir)
-        edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir)
+        photo_images = load_image_dataloader(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
+        animation_images = load_image_dataloader(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
+        edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
 
         print("Loading Trainer...")
         trainer = CartoonGANTrainer(generator, discriminator, feature_extractor, photo_images, animation_images,
