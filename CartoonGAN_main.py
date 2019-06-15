@@ -48,8 +48,12 @@ def load_model(generator, discriminator, checkpoint_path):
     discriminator.load_state_dict(checkpoint['discriminator_state_dict'])
 
 
+def load_generator(generator, checkpoint_path):
+    checkpoint = torch.load(checkpoint_path)
+    generator.load_state_dict(checkpoint['generator_state_dict'])
+
+
 def generate_and_save_images(generator, test_image_loader, save_path):
-    # TODO
     # for each image in test_image_loader, generate image and save
     generator.eval()
     torch_to_image = transforms.Compose([
@@ -78,7 +82,6 @@ def main():
 
     print("Creating models...")
     generator = Generator().to(device)
-    discriminator = Discriminator().to(device)
 
     if args.test:
         assert args.model_path, 'model_path must be provided for testing'
@@ -86,7 +89,7 @@ def main():
         generator.eval()
 
         print('Loading models...')
-        load_model(generator, discriminator, args.model_path)
+        load_generator(generator, args.model_path)
         # Do testing stuff
         # ex. generate image, compute fid score
 
@@ -109,7 +112,8 @@ def main():
     else:
         print("Training...")
 
-        print("Loading Feature Extractor...")
+        print("Loading Discriminator and Feature Extractor...")
+        discriminator = Discriminator().to(device)
         feature_extractor = FeatureExtractor().to(device)
 
         # load dataloaders
