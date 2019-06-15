@@ -103,8 +103,7 @@ class Discriminator(nn.Module):
             nn.BatchNorm2d(256),
             nn.LeakyReLU(self.negative_slope, inplace=True),
 
-            nn.Conv2d(256, 1, kernel_size=3, stride=1, padding=1, bias=use_bias),
-            nn.Sigmoid()
+            nn.Conv2d(256, 1, kernel_size=3, stride=1, padding=1, bias=use_bias)
 
         )
 
@@ -124,7 +123,7 @@ class FeatureExtractor(nn.Module):
         if network == 'vgg':
             vgg = tvmodels.vgg19_bn(pretrained=True)
             self.feature_extractor = vgg.features[:37]
-            # vgg.features[36] is conv4_4, which is what authors used
+            # vgg.features[36] is conv4_4 layer, which is what original CartoonGAN used
 
         else:
             # TODO

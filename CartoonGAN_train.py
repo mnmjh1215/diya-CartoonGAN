@@ -33,8 +33,8 @@ class CartoonGANTrainer:
         self.disc_optimizer = optim.Adam(self.discriminator.parameters(), lr=Config.lr,
                                          betas=(Config.adam_beta1, 0.999))
 
-        self.disc_criterion = nn.BCELoss().to(Config.device)  # for discriminator GAN loss
-        self.gen_criterion_gan = nn.BCELoss().to(Config.device)  # for generator GAN loss
+        self.disc_criterion = nn.BCEWithLogitsLoss().to(Config.device)  # for discriminator GAN loss
+        self.gen_criterion_gan = nn.BCEWithLogitsLoss().to(Config.device)  # for generator GAN loss
         self.gen_criterion_content = nn.L1Loss().to(Config.device)  # for generator content loss
         self.content_loss_weight = content_loss_weight
 
