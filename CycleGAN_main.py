@@ -133,9 +133,9 @@ def main():
 
         if not os.path.isdir('generated_images'):
             os.mkdir('generated_images')
-        if not os.path.isdir('generated_images/CartoonGAN'):
-            os.mkdir('generated_images/CartoonGAN/')
-        generate_and_save_images(generator, test_images, 'generated_images/CartoonGAN/')
+        if not os.path.isdir('generated_images/CycleGAN'):
+            os.mkdir('generated_images/CycleGAN/')
+        generate_and_save_images(generator, test_images, 'generated_images/CycleGAN/')
 
     else:
         print("Training...")
