@@ -20,6 +20,7 @@ def load_image_dataloader(root_dir, batch_size=Config.batch_size, num_workers=Co
     :param root_dir: directory that contains another directory of images. All images should be under root_dir/<some_dir>/
     :param batch_size: batch size
     :param num_workers: number of workers for torch.utils.data.DataLoader
+    :param shuffle: use shuffle
     :return: torch.utils.Dataloader object
     """
     assert os.path.isdir(root_dir)

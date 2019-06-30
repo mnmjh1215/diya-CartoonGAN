@@ -48,8 +48,6 @@ class CartoonGANTrainer:
         self.print_every = Config.print_every
 
     def train(self, num_epochs=Config.num_epochs, initialization_epochs=Config.initialization_epochs):
-        # TODO
-
         # if not initialized, do it!
         if self.curr_initialization_epoch < initialization_epochs:
             for init_epoch in range(self.curr_initialization_epoch, initialization_epochs):
@@ -82,7 +80,7 @@ class CartoonGANTrainer:
             for ix, ((animation_images, _), (edge_smoothed_images, _), (photo_images, _)) in enumerate(
                     zip(self.animation_image_loader,
                         self.edge_smoothed_image_loader,
-                        self.photo_image_loader)):
+                        self.photo_image_loader), 0):
                 # do train_step...!
                 animation_images = animation_images.to(Config.device)
                 edge_smoothed_images = edge_smoothed_images.to(Config.device)

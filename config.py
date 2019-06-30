@@ -23,7 +23,7 @@ class CartoonGANConfig:
 class CycleGANConfig:
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # dataloader.py
-    batch_size = 8
+    batch_size = 4
     num_workers = 2  # ...?
     photo_image_dir = "data/photo/"
     animation_image_dir = "data/animation/"

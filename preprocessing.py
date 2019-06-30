@@ -137,19 +137,24 @@ def main():
                         help='Which preprocessing do you want?')
 
     parser.add_argument('--photo_image_source_path', 
-                        help='Path to directory of photo images to be preprocessed. Required when image_type_to_process is photo')
+                        help='Path to directory of photo images to be preprocessed. '
+                             'Required when image_type_to_process is photo')
 
     parser.add_argument('--photo_image_save_path',
-                        help='Path to directory where preprocessed photo images will be saved.  Required when image_type_to_process is photo')
+                        help='Path to directory where preprocessed photo images will be saved. '
+                             'Required when image_type_to_process is photo')
 
     parser.add_argument('--animation_image_source_path',
-                        help='Path to directory of animation images to be preprocessed. Required when image_type_to_process is animation')
+                        help='Path to directory of animation images to be preprocessed. '
+                             'Required when image_type_to_process is animation')
 
     parser.add_argument('--animation_image_save_path',
-                        help='Path to directory where preprocessed animation images will be saved.  Required when image_type_to_process is animation')
+                        help='Path to directory where preprocessed animation images will be saved. '
+                             'Required when image_type_to_process is animation')
 
     parser.add_argument('--animation_edge_smoothed_save_path',
-                        help='Path to directory where preprocessed and edge smoothed animation images will be saved.  Required when image_type_to_process is animation')
+                        help='Path to directory where preprocessed and edge smoothed animation images will be saved. '
+                             'Required when image_type_to_process is animation')
 
     parser.add_argument('--target_size',
                         type=int,
