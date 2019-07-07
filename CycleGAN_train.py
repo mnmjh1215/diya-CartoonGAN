@@ -59,7 +59,7 @@ class CycleGANTrainer:
         self.loss_identity_hist = []
         self.print_every = Config.print_every
 
-    def train(self, num_epochs=Config.num_epochs, initialization_epochs=0):
+    def train(self, num_epochs=Config.num_epochs, initialization_epochs=0, save_path="checkpoints/CycleGAN/"):
         # TODO
 
         for init_epoch in range(self.curr_initialization_epoch, initialization_epochs):
@@ -133,12 +133,7 @@ class CycleGANTrainer:
             print("Training Phase [{0}/{1}], {2:.4f} seconds".format(self.curr_epoch, num_epochs, time.time() - start))
 
         # Training finished, save checkpoint
-        if not os.path.isdir('checkpoints/'):
-            os.mkdir('checkpoints/')
-        if not os.path.isdir('checkpoints/CycleGAN/'):
-            os.mkdir('checkpoints/CycleGAN/')
-
-        self.save_checkpoint('checkpoints/CycleGAN/checkpoint-epoch-{0}.ckpt'.format(num_epochs))
+        self.save_checkpoint(os.path.join(save_path, 'checkpoint-epoch-{0}.ckpt'.format(num_epochs)))
 
         return self.loss_D_x_hist, self.loss_D_y_hist, self.loss_G_GAN_hist, self.loss_F_GAN_hist, \
                self.loss_cycle_hist, self.loss_identity_hist

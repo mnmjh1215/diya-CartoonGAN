@@ -24,6 +24,10 @@ def get_args():
     parser.add_argument('--model_path',
                         help='Path to saved model')
 
+    parser.add_argument('--save_path',
+                        default='checkpoints/CycleGAN/',
+                        help='path to save checkpoint when training is finished.')
+
     parser.add_argument('--test_image_path',
                         default=Config.test_photo_image_dir,
                         help='Path to test photo images')
@@ -167,7 +171,8 @@ def main():
         print('Start Training...')
         loss_D_x_hist, loss_D_y_hist, loss_G_GAN_hist, loss_F_GAN_hist, \
         loss_cycle_hist, loss_identity_hist = trainer.train(num_epochs=args.num_epochs,
-                                                            initialization_epochs=args.initialization_epochs)
+                                                            initialization_epochs=args.initialization_epochs,
+                                                            save_path=args.save_path)
 
         plt.plot(loss_D_x_hist, label='D_x loss')
         plt.plot(loss_D_y_hist, label='D_y loss')
