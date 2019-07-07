@@ -24,13 +24,17 @@ def get_args():
     parser.add_argument('--model_path',
                         help='Path to saved model')
 
-    parser.add_argument('--save_path',
+    parser.add_argument('--model_save_path',
                         default='checkpoints/CycleGAN/',
                         help='path to save checkpoint when training is finished.')
 
     parser.add_argument('--test_image_path',
                         default=Config.test_photo_image_dir,
                         help='Path to test photo images')
+
+    parser.add_argument('--generated_image_save_path',
+                        default='generated_images/CycleGAN/',
+                        help='path to save generated images')
 
     parser.add_argument('--initialization_epochs',
                         type=int,
@@ -139,7 +143,7 @@ def main():
             os.mkdir('generated_images')
         if not os.path.isdir('generated_images/CycleGAN'):
             os.mkdir('generated_images/CycleGAN/')
-        generate_and_save_images(generator, test_images, 'generated_images/CycleGAN/')
+        generate_and_save_images(generator, test_images, args.generated_image_save_path)
 
     else:
         print("Training...")
@@ -172,7 +176,7 @@ def main():
         loss_D_x_hist, loss_D_y_hist, loss_G_GAN_hist, loss_F_GAN_hist, \
         loss_cycle_hist, loss_identity_hist = trainer.train(num_epochs=args.num_epochs,
                                                             initialization_epochs=args.initialization_epochs,
-                                                            save_path=args.save_path)
+                                                            save_path=args.model_save_path)
 
         plt.plot(loss_D_x_hist, label='D_x loss')
         plt.plot(loss_D_y_hist, label='D_y loss')
