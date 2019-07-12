@@ -27,6 +27,8 @@ class CycleGANTrainer:
 
         self.photo_image_loader = photo_image_loader
         self.animation_image_loader = animation_image_loader
+        if use_edge_smoothed:
+            assert edge_smoothed_image_loader is not None
         self.edge_smoothed_image_loader = edge_smoothed_image_loader
 
         self.generated_x_images = ImagePool(50)

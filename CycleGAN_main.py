@@ -168,17 +168,12 @@ def main():
         if args.load_data_on_ram:
             photo_images = load_image_dataloader_on_RAM(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
             animation_images = load_image_dataloader_on_RAM(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
-            if args.use_edge_smoothed_images:
-                edge_smoothed_images = load_image_dataloader_on_RAM(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
-            else:
-                edge_smoothed_images = None
+            edge_smoothed_images = load_image_dataloader_on_RAM(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
+
         else:
             photo_images = load_image_dataloader(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
             animation_images = load_image_dataloader(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
-            if args.use_edge_smoothed_images:
-                edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
-            else:
-                edge_smoothed_images = None
+            edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
 
         print("Loading Trainer...")
         trainer = CycleGANTrainer(G, F, D_x, D_y, photo_images, animation_images,
