@@ -60,7 +60,7 @@ class ImageDataset(Dataset):
         return self.images[index], 0
 
 
-def load_image_dataloader_on_RAM(root_dir, batch_size=Config.batch_size, num_workers=0, shuffle=True):
+def load_image_dataloader_on_RAM(root_dir, batch_size=Config.batch_size, num_workers=Config.num_workers, shuffle=True):
     # load images on ram
     # AWS EBS seems to be very slow
     # TODO
