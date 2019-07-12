@@ -70,7 +70,7 @@ def load_image_dataloader_on_RAM(root_dir, batch_size=Config.batch_size, num_wor
                                   batch_size=batch_size,
                                   num_workers=num_workers)
 
-    pass
+    return image_dataloader
 
 # use as following
 # photo_images = load_image_dataloader(root_dir=Config.photo_image_dir)
