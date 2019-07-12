@@ -4,7 +4,7 @@ from CycleGAN_model import Generator, Discriminator
 from CartoonGAN_model import Generator as CartoonGAN_Generator, Discriminator as CartoonGAN_Discriminator
 from CycleGAN_train import CycleGANTrainer
 from config import CycleGANConfig as Config
-from dataloader import load_image_dataloader
+from dataloader import load_image_dataloader, load_image_dataloader_on_RAM
 
 import torch
 import matplotlib.pyplot as plt
@@ -57,6 +57,10 @@ def get_args():
     parser.add_argument('--test_animation_to_photo',
                         action='store_true',
                         help='Use this argument to test animation to photo transfer')
+
+    parser.add_argument('--load_data_on_ram',
+                        action='store_true',
+                        help="Use this argument to load entire dataset on ram. (useful in AWS setting)")
 
     args = parser.parse_args()
 
@@ -161,9 +165,20 @@ def main():
             D_y = CartoonGAN_Discriminator().to(device)
 
         # load dataloaders
-        photo_images = load_image_dataloader(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
-        animation_images = load_image_dataloader(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
-        edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
+        if args.load_data_on_ram:
+            photo_images = load_image_dataloader_on_RAM(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
+            animation_images = load_image_dataloader_on_RAM(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
+            if args.use_edge_smoothed_images:
+                edge_smoothed_images = load_image_dataloader_on_RAM(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
+            else:
+                edge_smoothed_images = None
+        else:
+            photo_images = load_image_dataloader(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
+            animation_images = load_image_dataloader(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
+            if args.use_edge_smoothed_images:
+                edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
+            else:
+                edge_smoothed_images = None
 
         print("Loading Trainer...")
         trainer = CycleGANTrainer(G, F, D_x, D_y, photo_images, animation_images,

@@ -2,9 +2,12 @@
 # we assume that all images are already preprocessed using preprocessing.py
 
 import os
+import torch
 from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Dataset
 from config import CartoonGANConfig as Config
+from torchvision.datasets.folder import pil_loader
+import glob
 
 # transforms that will be applied to all datasets
 transform = transforms.Compose([
@@ -33,6 +36,41 @@ def load_image_dataloader(root_dir, batch_size=Config.batch_size, num_workers=Co
                             num_workers=num_workers)
 
     return dataloader
+
+
+class ImageDataset(Dataset):
+    def __init__(self, root_dir, loader=pil_loader, transform=transform):
+        # TODO
+        self.loader = loader
+        self.transform = transform
+        self.path = os.path.join(root_dir, 'images/*')
+        self.images = []
+        for image_path in glob.glob(self.path):
+            image = self.loader(image_path)
+            image_tensor = self.transform(image)
+            self.images.append(image_tensor)
+        self.images = torch.stack(self.images)
+
+    def __len__(self):
+        # TODO
+        return len(self.images)
+
+    def __getitem__(self, index):
+        # TODO
+        return self.images[index], 0
+
+
+def load_image_dataloader_on_RAM(root_dir, batch_size=Config.batch_size, num_workers=0, shuffle=True):
+    # load images on ram
+    # AWS EBS seems to be very slow
+    # TODO
+    assert os.path.isdir(root_dir)
+    image_dataloader = DataLoader(ImageDataset(root_dir),
+                                  shuffle=shuffle,
+                                  batch_size=batch_size,
+                                  num_workers=num_workers)
+
+    pass
 
 # use as following
 # photo_images = load_image_dataloader(root_dir=Config.photo_image_dir)
