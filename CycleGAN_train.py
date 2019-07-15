@@ -274,7 +274,8 @@ class CycleGANTrainer:
                 'loss_F_GAN_hist': self.loss_F_GAN_hist,
                 'loss_cycle_hist': self.loss_cycle_hist,
                 'loss_identity_hist': self.loss_identity_hist,
-                'init_loss_hist': self.init_loss_hist
+                'init_loss_hist': self.init_loss_hist,
+                'curr_epoch': self.curr_epoch
 
             }, checkpoint_path
         )
@@ -296,6 +297,10 @@ class CycleGANTrainer:
         self.loss_cycle_hist = checkpoint['loss_cycle_hist']
         self.loss_identity_hist = checkpoint['loss_identity_hist']
         self.init_loss_hist = checkpoint['init_loss_hist']
+        try:
+            self.curr_epoch = checkpoint['curr_epoch']
+        except:
+            self.curr_epoch = int(checkpoint_path.split('-')[-1].split('.')[0])
 
 
 class ImagePool:
