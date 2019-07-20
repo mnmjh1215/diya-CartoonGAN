@@ -50,10 +50,6 @@ def get_args():
                         action='store_true',
                         help='Use this argument to use edge smoothed images in training')
 
-    parser.add_argument('--use_cartoongan_architecture',
-                        action='store_true',
-                        help="Use this argument to use CartoonGAN's generator and discriminator architecture")
-
     parser.add_argument('--test_animation_to_photo',
                         action='store_true',
                         help='Use this argument to test animation to photo transfer')
@@ -113,16 +109,11 @@ def main():
         print('Testing...')
 
         print("Creating models...")
-        if not args.use_cartoongan_architecture:
-            G = Generator().to(device)
-            F = Generator().to(device)
-            G.eval()
-            F.eval()
 
-        else:
-            G = CartoonGAN_Generator().to(device)
-            F = CartoonGAN_Generator().to(device)
-
+        G = Generator().to(device)
+        F = Generator().to(device)
+        G.eval()
+        F.eval()
         print('Loading models...')
         load_generators(G, F, args.model_path)
         # Do testing stuff
@@ -153,16 +144,10 @@ def main():
         print("Training...")
 
         print("Loading 2 generators and 2 discriminators")
-        if not args.use_cartoongan_architecture:
-            G = Generator().to(device)
-            F = Generator().to(device)
-            D_x = Discriminator().to(device)
-            D_y = Discriminator().to(device)
-        else:
-            G = CartoonGAN_Generator().to(device)
-            F = CartoonGAN_Generator().to(device)
-            D_x = CartoonGAN_Discriminator().to(device)
-            D_y = CartoonGAN_Discriminator().to(device)
+        G = Generator().to(device)
+        F = Generator().to(device)
+        D_x = Discriminator().to(device)
+        D_y = Discriminator().to(device)
 
         # load dataloaders
         if args.load_data_on_ram:
