@@ -1,18 +1,12 @@
-# CartoonGAN implementation in pytorch...
-# Except some parts are modified.
+# CartoonGAN implementation in PyTorch...
+# + some modifications
 
 # Modifications are:
 # 1. Use InstanceNorm instead of BatchNorm: In image style transfer task, instance normalization tends to work better
 # 2. Use LeakyReLu instead of ReLU in both Generator and Discriminator
-# 3. Use other network for feature extraction. VGG is old, slow and inaccurate
+# 3. Use other network for feature extraction. VGG is old, slow and inaccurate, so used ResNet
 # 4. Try other loss function, like WGAN, Hinge or MSE  -> To be implemented in other file.
 
-# TODO
-# Implementation progress
-# 1. x
-# 2. x
-# 3. x
-# 4. x
 
 import torch
 import torch.nn as nn
@@ -141,9 +135,9 @@ class FeatureExtractor(nn.Module):
             # vgg.features[36] is conv4_4, which is what authors used
             # when input has shape [3, 512, 512], output of feature extractor is [512, 64, 64]
 
-        elif network == 'resnet-50':
+        elif network == 'resnet-101':
             # TODO
-            resnet = tvmodels.resnet50(pretrained=True)
+            resnet = tvmodels.resnet101(pretrained=True)
             layers = [resnet.conv1, resnet.bn1, resnet.relu, resnet.maxpool, resnet.layer1, resnet.layer2]
             self.feature_extractor = nn.Sequential(*layers)
             # when input has shape [3, 512, 512], output of feature extractor is [512, 64, 64]
