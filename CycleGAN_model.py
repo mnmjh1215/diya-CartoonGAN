@@ -100,7 +100,6 @@ class Discriminator(nn.Module):
 
             nn.Conv2d(512, 1, kernel_size=4, stride=1, padding=1)
             # sigmoid is not necessary
-            # LSGAN needs no sigmoid, and vanilla GAN's loss can be calculated using BCEWithLogitsLoss
         )
 
     def forward(self, input):

@@ -1,6 +1,7 @@
 # train and test CartoonGAN
 
 from CartoonGAN_model import Generator, Discriminator, FeatureExtractor
+import CartoonGAN_model_modified as modified_models
 from CartoonGAN_train import CartoonGANTrainer
 from config import CartoonGANConfig as Config
 from dataloader import load_image_dataloader
@@ -18,7 +19,7 @@ def get_args():
 
     parser.add_argument('--test',
                         action='store_true',
-                        help='Use this argument to test generator and compute FID score')
+                        help='Use this argument to test generator')
 
     parser.add_argument('--model_path',
                         help='Path to saved model')
@@ -36,6 +37,10 @@ def get_args():
                         type=int,
                         default=Config.num_epochs,
                         help='Number of training epochs')
+
+    parser.add_argument('--use_modified_model',
+                        action='store_true',
+                        help="Use this argument to use modified model")
 
     args = parser.parse_args()
 
@@ -81,6 +86,10 @@ def main():
     print("PyTorch running with device {0}".format(device))
 
     print("Creating models...")
+    if args.use_modified_model:
+        Generator = modified_models.Generator
+        Discriminator = modified_models.Discriminator
+        FeatureExtractor = modified_models.FeatureExtractor
     generator = Generator().to(device)
 
     if args.test:
@@ -123,7 +132,7 @@ def main():
 
         print("Loading Trainer...")
         trainer = CartoonGANTrainer(generator, discriminator, feature_extractor, photo_images, animation_images,
-                                    edge_smoothed_images)
+                                    edge_smoothed_images, lsgan=args.use_modified_model)
         if args.model_path:
             trainer.load_checkpoint(args.model_path)
 

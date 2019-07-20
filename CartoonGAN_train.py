@@ -9,7 +9,7 @@ from config import CartoonGANConfig as Config
 class CartoonGANTrainer:
     def __init__(self, generator, discriminator, feature_extractor,
                  photo_image_loader, animation_image_loader, edge_smoothed_image_loader,
-                 content_loss_weight=Config.content_loss_weight):
+                 content_loss_weight=Config.content_loss_weight, lsgan=False):
         """
         
         :param generator: CartoonGAN generator
@@ -32,9 +32,13 @@ class CartoonGANTrainer:
         self.gen_optimizer = optim.Adam(self.generator.parameters(), lr=Config.lr, betas=(Config.adam_beta1, 0.999))
         self.disc_optimizer = optim.Adam(self.discriminator.parameters(), lr=Config.lr,
                                          betas=(Config.adam_beta1, 0.999))
-
-        self.disc_criterion = nn.BCEWithLogitsLoss().to(Config.device)  # for discriminator GAN loss
-        self.gen_criterion_gan = nn.BCEWithLogitsLoss().to(Config.device)  # for generator GAN loss
+        if not lsgan:
+            self.disc_criterion = nn.BCEWithLogitsLoss().to(Config.device)  # for discriminator GAN loss
+            self.gen_criterion_gan = nn.BCEWithLogitsLoss().to(Config.device)  # for generator GAN loss
+        else:
+            # use Least Square GAN
+            self.disc_criterion = nn.MSELoss().to(Config.device)
+            self.gen_criterion = nn.MSELoss().to(Config.device)
         self.gen_criterion_content = nn.L1Loss().to(Config.device)  # for generator content loss
         self.content_loss_weight = content_loss_weight
 
