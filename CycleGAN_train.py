@@ -232,30 +232,30 @@ class CycleGANTrainer:
 
     def initialize_step(self, photo_images, animation_images):
         # TODO
-        loss = 0
+        # Train only using cycle-consistency and identity loss
         self.G.zero_grad()
         self.F.zero_grad()
 
-        # initialization step on G (photo image to photo image)
-        x_features = self.feature_extractor((photo_images + 1) / 2).detach()  # move [-1, 1] to [0, 1]
-        Gx = self.G(photo_images)
-        Gx_features = self.feature_extractor((Gx + 1) / 2)  # move [-1, 1] to [0, 1]
+        generated_y = self.G(photo_images)
+        generated_x = self.F(animation_images)
 
-        initialization_loss = self.lambda_initialization * self.Initialization_criterion(Gx_features, x_features)
+        cycle_x = self.F(generated_y)  # X -> Y -> X
+        cycle_y = self.G(generated_x)  # Y -> X -> Y
+
+        loss_cycle = self.lambda_cycle * self.Cycle_criterion(cycle_x, photo_images)
+        loss_cycle += self.lambda_cycle * self.Cycle_criterion(cycle_y, animation_images)
+
+        G_y = self.G(animation_images)
+        F_x = self.F(photo_images)
+        loss_identity = self.lambda_identity * self.Identity_criterion(G_y, animation_images)
+        loss_identity += self.lambda_identity * self.Identity_criterion(F_x, photo_images)
+
+        initialization_loss = loss_cycle + loss_identity
         initialization_loss.backward()
         self.G_optimizer.step()
-        loss += initialization_loss.item()
-
-        y_features = self.feature_extractor((animation_images + 1) / 2).detach()  # move [-1, 1] to [0, 1]
-        Fy = self.F(animation_images)
-        Fy_features = self.feature_extractor((Fy + 1) / 2)  # move [-1, 1] to [0, 1]
-
-        initialization_loss = self.lambda_initialization * self.Initialization_criterion(Fy_features, y_features)
-        initialization_loss.backward()
         self.F_optimizer.step()
-        loss += initialization_loss.item()
 
-        return loss
+        return initialization_loss.item()
 
     def save_checkpoint(self, checkpoint_path):
         torch.save(
