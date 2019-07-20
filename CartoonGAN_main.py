@@ -1,6 +1,6 @@
 # train and test CartoonGAN
 
-from CartoonGAN_model import Generator, Discriminator, FeatureExtractor
+import CartoonGAN_model as models
 import CartoonGAN_model_modified as modified_models
 from CartoonGAN_train import CartoonGANTrainer
 from config import CartoonGANConfig as Config
@@ -90,6 +90,11 @@ def main():
         Generator = modified_models.Generator
         Discriminator = modified_models.Discriminator
         FeatureExtractor = modified_models.FeatureExtractor
+    else:
+        Generator = models.Generator
+        Discriminator = models.Discriminator
+        FeatureExtractor = models.FeatureExtractor
+        
     generator = Generator().to(device)
 
     if args.test:
