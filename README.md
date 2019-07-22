@@ -1,6 +1,6 @@
 # [CartoonGAN](http://openaccess.thecvf.com/content_cvpr_2018/papers/Chen_CartoonGAN_Generative_Adversarial_CVPR_2018_paper.pdf)
 
-Contributors: [문지환]{https://github.com/mnmjh1215}, [윤준석]{https://github.com/kokookok77}, [박수현]{https://github.com/suhyunS2}, [이유재]{https://github.com/yujaelee}, [주윤하]{https://github.com/YoonHaJoo}
+Contributors: [문지환](https://github.com/mnmjh1215), [윤준석](https://github.com/kokookok77), [박수현](https://github.com/suhyunS2), [이유재](https://github.com/yujaelee), [주윤하](https://github.com/YoonHaJoo)
 
 Project for DIYA Meet-up at Aug 4, 2019.
 
