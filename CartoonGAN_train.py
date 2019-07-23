@@ -38,7 +38,7 @@ class CartoonGANTrainer:
         else:
             # use Least Square GAN
             self.disc_criterion = nn.MSELoss().to(Config.device)
-            self.gen_criterion = nn.MSELoss().to(Config.device)
+            self.gen_criterion_gan = nn.MSELoss().to(Config.device)
         self.gen_criterion_content = nn.L1Loss().to(Config.device)  # for generator content loss
         self.content_loss_weight = content_loss_weight
 
