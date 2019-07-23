@@ -51,7 +51,8 @@ class CartoonGANTrainer:
         self.loss_content_hist = []
         self.print_every = Config.print_every
 
-    def train(self, num_epochs=Config.num_epochs, initialization_epochs=Config.initialization_epochs):
+    def train(self, num_epochs=Config.num_epochs, initialization_epochs=Config.initialization_epochs,
+              save_path='checkpoints/CartoonGAN/'):
         # if not initialized, do it!
         if self.curr_initialization_epoch < initialization_epochs:
             for init_epoch in range(self.curr_initialization_epoch, initialization_epochs):
@@ -115,7 +116,7 @@ class CartoonGANTrainer:
         if not os.path.isdir('checkpoints/CartoonGAN/'):
             os.mkdir('checkpoints/CartoonGAN/')
 
-        self.save_checkpoint('checkpoints/CartoonGAN/checkpoint-epoch-{0}.ckpt'.format(num_epochs))
+        self.save_checkpoint(os.path.join(save_path, 'checkpoint-epoch-{0}.ckpt'.format(num_epochs)))
 
         return self.loss_D_hist, self.loss_G_hist, self.loss_content_hist
 

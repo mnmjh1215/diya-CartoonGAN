@@ -3,6 +3,7 @@ import torch
 
 class CartoonGANConfig:
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model_save_path = ""
     # dataloader.py
     batch_size = 8
     num_workers = 8  # ...?

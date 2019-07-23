@@ -24,6 +24,10 @@ def get_args():
     parser.add_argument('--model_path',
                         help='Path to saved model')
 
+    parser.add_argument('--model_save_path',
+                        default=Config.model_save_path,
+                        help='Path to save trained model')
+
     parser.add_argument('--test_image_path',
                         default=Config.test_photo_image_dir,
                         help='Path to test photo images')
@@ -143,7 +147,8 @@ def main():
 
         print('Start Training...')
         loss_D_hist, loss_G_hist, loss_content_hist = trainer.train(num_epochs=args.num_epochs,
-                                                                    initialization_epochs=args.initialization_epochs)
+                                                                    initialization_epochs=args.initialization_epochs,
+                                                                    save_path=args.model_save_path)
 
         plt.plot(loss_D_hist, label='Discriminator loss')
         plt.plot(loss_G_hist, label='Generator loss')
