@@ -122,12 +122,12 @@ class Discriminator(nn.Module):
 
 
 class FeatureExtractor(nn.Module):
-    def __init__(self, network='resnet-50'):
+    def __init__(self, network='resnet-101'):
         # in original paper, authors used vgg.
         # however, there exist much better convolutional networks than vgg, and we may experiment with them
         # possible models may be vgg, resnet, etc
         super().__init__()
-        assert network in ['vgg', 'resnet-50']
+        assert network in ['vgg', 'resnet-101']
 
         if network == 'vgg':
             vgg = tvmodels.vgg19_bn(pretrained=True)
