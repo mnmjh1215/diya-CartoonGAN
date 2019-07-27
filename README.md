@@ -4,10 +4,13 @@ Contributors: [문지환](https://github.com/mnmjh1215), [윤준석](https://git
 
 Project for DIYA Meet-up at Aug 4, 2019.
 
-Goals of this project are:
+### Goals of this project:
 
 1. Implement CartoonGAN and train/test with our data
-2. Compare CartoonGAN with CycleGAN
-3. Add components of CartoongGAN to CycleGAN, such as edge smoothed data
-4. Improve CartoonGAN
+2. Compare CartoonGAN and CycleGAN
+3. Add some components of CartoongGAN to CycleGAN, such as edge smoothed data, and see if image quality improves
+4. Further improve CartoonGAN
 
+### Result
+
+Coming soon...
