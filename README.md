@@ -35,3 +35,10 @@ Here, we only present images generated with our modified, improved CartoonGAN.
 ![ex-7.jpg](./images/ex-7.jpg)
 ![ex-8.jpg](./images/ex-8.jpg)
 ![ex-9.jpg](./images/ex-9.jpg)
+
+
+...and some worse generated images...
+
+![bad-1.jpg](./images/bad-1.jpg)
+![bad-2.jpg](./images/bad-2.jpg)
+![bad-3.jpg](./images/bad-3.jpg)
