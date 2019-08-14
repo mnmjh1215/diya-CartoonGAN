@@ -15,12 +15,14 @@ Project for DIYA Meet-up at Aug 4, 2019.
 
 [Presentation](./images/meet-up.pdf) (in Korean)
 
-According to FID, CartoonGAN is better than CycleGAN, and our modified CartoonGAN is the best. (FID is smaller if two set of images are similar)
+According to FID, CartoonGAN is better than CycleGAN, and our modified CartoonGAN is the best. (FID is smaller if two sets of images are similar)
 
 |                           | CycleGAN | CartoonGAN | CartoonGAN-modified |
 |---------------------------|----------|------------|---------------------|
 | FID with animation images | 108.69   | 100.30     | 95.50               |
 | FID with photo images     | 76.13    | 80.96      | 81.91               |
+
+Results of modified CycleGANs are not presented, because they showed little improvement.
 
 #### Images
 
