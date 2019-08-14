@@ -26,12 +26,12 @@ According to FID, CartoonGAN is better than CycleGAN, and our modified CartoonGA
 
 Here, we only present images generated with our modified, improved CartoonGAN.
 
-![ex-1.jpg][./images/ex-1.jpg]
-![ex-2.jpg][./images/ex-2.jpg]
-![ex-3.jpg][./images/ex-3.jpg]
-![ex-4.jpg][./images/ex-4.jpg]
-![ex-5.jpg][./images/ex-5.jpg]
-![ex-6.jpg][./images/ex-6.jpg]
-![ex-7.jpg][./images/ex-7.jpg]
-![ex-8.jpg][./images/ex-8.jpg]
-![ex-9.jpg][./images/ex-9.jpg]
+![ex-1.jpg](./images/ex-1.jpg)
+![ex-2.jpg](./images/ex-2.jpg)
+![ex-3.jpg](./images/ex-3.jpg)
+![ex-4.jpg](./images/ex-4.jpg)
+![ex-5.jpg](./images/ex-5.jpg)
+![ex-6.jpg](./images/ex-6.jpg)
+![ex-7.jpg](./images/ex-7.jpg)
+![ex-8.jpg](./images/ex-8.jpg)
+![ex-9.jpg](./images/ex-9.jpg)
