@@ -44,3 +44,6 @@ Here, we only present images generated with our modified, improved CartoonGAN.
 ![bad-1.jpg](./images/bad-1.jpg)
 ![bad-2.jpg](./images/bad-2.jpg)
 ![bad-3.jpg](./images/bad-3.jpg)
+
+
+Special thanks to [ML2](https://github.com/kc-ml2) for financial support
