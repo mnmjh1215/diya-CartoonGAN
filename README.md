@@ -13,7 +13,7 @@ Project for DIYA Meet-up at Aug 4, 2019.
 
 ### Result
 
-[Presentation](./images/meet-up.pdf) (in Korean)
+[Presentation](./images/DIYA-meet-up-CV_2019-08-04.pdf) (in Korean)
 
 According to FID, CartoonGAN is better than CycleGAN, and our modified CartoonGAN is the best. (FID is smaller if two sets of images are similar)
 
