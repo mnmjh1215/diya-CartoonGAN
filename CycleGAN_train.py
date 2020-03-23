@@ -62,7 +62,6 @@ class CycleGANTrainer:
         self.print_every = Config.print_every
 
     def train(self, num_epochs=Config.num_epochs, initialization_epochs=0, save_path="checkpoints/CycleGAN/"):
-        # TODO
 
         for init_epoch in range(self.curr_initialization_epoch, initialization_epochs):
             start = time.time()
@@ -141,7 +140,6 @@ class CycleGANTrainer:
                self.loss_cycle_hist, self.loss_identity_hist
 
     def train_step(self, photo_images, animation_images, edge_smoothed_images):
-        # TODO
         # photo images are X, animation images are Y
 
         self.D_x.zero_grad()
@@ -169,6 +167,8 @@ class CycleGANTrainer:
         loss_D_y += loss_generated
 
         if self.use_edge_smoothed:
+            # discriminator is trained to classify edge smoothed animation images as 0 (not animation iamges)
+            # this loss force generator to generate images with sharper edges
             edge_smoothed_output = self.D_y(edge_smoothed_images)
             edge_smoothed_target = torch.zeros_like(edge_smoothed_output)
             loss_edge_smoothed = self.GAN_criterion(edge_smoothed_output, edge_smoothed_target)

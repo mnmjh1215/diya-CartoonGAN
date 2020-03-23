@@ -40,7 +40,6 @@ def load_image_dataloader(root_dir, batch_size=Config.batch_size, num_workers=Co
 
 class ImageDataset(Dataset):
     def __init__(self, root_dir, loader=pil_loader, transform=transform):
-        # TODO
         self.loader = loader
         self.transform = transform
         self.path = os.path.join(root_dir, 'images/*')
@@ -52,18 +51,15 @@ class ImageDataset(Dataset):
         self.images = torch.stack(self.images)
 
     def __len__(self):
-        # TODO
         return len(self.images)
 
     def __getitem__(self, index):
-        # TODO
         return self.images[index], 0
 
 
 def load_image_dataloader_on_RAM(root_dir, batch_size=Config.batch_size, num_workers=Config.num_workers, shuffle=True):
     # load images on ram
-    # AWS EBS seems to be very slow
-    # TODO
+    # only use when ram is significantly larger than data size
     assert os.path.isdir(root_dir)
     image_dataloader = DataLoader(ImageDataset(root_dir),
                                   shuffle=shuffle,
@@ -71,9 +67,3 @@ def load_image_dataloader_on_RAM(root_dir, batch_size=Config.batch_size, num_wor
                                   num_workers=num_workers)
 
     return image_dataloader
-
-# use as following
-# photo_images = load_image_dataloader(root_dir=Config.photo_image_dir)
-# animation_images = load_image_dataloader(root_dir=Config.animation_image_dir)
-# edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir)
-# test_photo_images = load_image_dataloader(root_dir=Config.test_photo_image_dir, shuffle=False)

@@ -38,19 +38,6 @@ except ImportError:
 
 from inception import InceptionV3
 
-parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-parser.add_argument('path', type=str, nargs=2,
-                    help=('Path to the generated images or '
-                          'to .npz statistic files'))
-parser.add_argument('--batch-size', type=int, default=50,
-                    help='Batch size to use')
-parser.add_argument('--dims', type=int, default=2048,
-                    choices=list(InceptionV3.BLOCK_INDEX_BY_DIM),
-                    help=('Dimensionality of Inception features to use. '
-                          'By default, uses pool3 features'))
-parser.add_argument('-c', '--gpu', default='', type=str,
-                    help='GPU to use (leave blank for CPU only)')
-
 
 def get_activations(files, model, batch_size=50, dims=2048,
                     cuda=False, verbose=False):
@@ -235,7 +222,22 @@ def calculate_fid_given_paths(paths, batch_size, cuda, dims):
 
 
 if __name__ == '__main__':
+    parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+
+    parser.add_argument('path', type=str, nargs=2,
+                        help=('Path to the generated images or '
+                            'to .npz statistic files'))
+    parser.add_argument('--batch-size', type=int, default=50,
+                        help='Batch size to use')
+    parser.add_argument('--dims', type=int, default=2048,
+                        choices=list(InceptionV3.BLOCK_INDEX_BY_DIM),
+                        help=('Dimensionality of Inception features to use. '
+                            'By default, uses pool3 features'))
+    parser.add_argument('-c', '--gpu', default='', type=str,
+                        help='GPU to use (leave blank for CPU only)')
+
     args = parser.parse_args()
+    
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu
 
     fid_value = calculate_fid_given_paths(args.path,

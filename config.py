@@ -3,10 +3,9 @@ import torch
 
 class CartoonGANConfig:
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model_save_path = ""
     # dataloader.py
     batch_size = 8
-    num_workers = 8  # ...?
+    num_workers = 4
     photo_image_dir = "data/photo/"
     animation_image_dir = "data/animation/"
     edge_smoothed_image_dir = "data/edge_smoothed/"
@@ -25,7 +24,7 @@ class CycleGANConfig:
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # dataloader.py
     batch_size = 4
-    num_workers = 16  # ...?
+    num_workers = 4
     photo_image_dir = "data/photo/"
     animation_image_dir = "data/animation/"
     edge_smoothed_image_dir = "data/edge_smoothed/"

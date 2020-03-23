@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Jun  2 16:41:49 2019
-
-@author: 윤준석
-"""
 
 import torch
 import torch.nn as nn

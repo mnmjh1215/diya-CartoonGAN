@@ -7,7 +7,6 @@ from config import CycleGANConfig as Config
 from dataloader import load_image_dataloader, load_image_dataloader_on_RAM
 
 import torch
-import matplotlib.pyplot as plt
 import argparse
 import torchvision.utils as tvutils
 import os
@@ -28,6 +27,18 @@ def get_args():
                         default='checkpoints/CycleGAN/',
                         help='path to save checkpoint when training is finished.')
 
+    parser.add_argument("--photo_image_dir",
+                        default=Config.photo_image_dir,
+                        help="Path to photo images")
+    
+    parser.add_argument("--animation_image_dir",
+                        default=Config.animation_image_dir,
+                        help="Path to animation images")
+    
+    parser.add_argument("--edge_smoothed_image_dir",
+                        default=Config.edge_smoothed_image_dir,
+                        help="Path to edge smoothed animation images")
+
     parser.add_argument('--test_image_path',
                         default=Config.test_photo_image_dir,
                         help='Path to test photo images')
@@ -45,6 +56,10 @@ def get_args():
                         type=int,
                         default=Config.num_epochs,
                         help='Number of training epochs')
+    
+    parser.add_argument("--batch_size",
+                        type=int,
+                        default=Config.batch_size)
 
     parser.add_argument('--use_edge_smoothed_images',
                         action='store_true',
@@ -116,8 +131,6 @@ def main():
         F.eval()
         print('Loading models...')
         load_generators(G, F, args.model_path)
-        # Do testing stuff
-        # ex. generate image, compute fid score
 
         if not args.test_animation_to_photo:
             generator = G
@@ -134,10 +147,9 @@ def main():
         tvutils.save_image(image_batch, 'test_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
         tvutils.save_image(new_images, 'generated_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
 
-        if not os.path.isdir('generated_images'):
-            os.mkdir('generated_images')
         if not os.path.isdir('generated_images/CycleGAN'):
-            os.mkdir('generated_images/CycleGAN/')
+            os.makedirs('generated_images/CycleGAN/')
+            
         generate_and_save_images(generator, test_images, args.generated_image_save_path)
 
     else:
@@ -151,14 +163,14 @@ def main():
 
         # load dataloaders
         if args.load_data_on_ram:
-            photo_images = load_image_dataloader_on_RAM(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
-            animation_images = load_image_dataloader_on_RAM(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
-            edge_smoothed_images = load_image_dataloader_on_RAM(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
+            photo_images = load_image_dataloader_on_RAM(root_dir=args.photo_image_dir, batch_size=args.batch_size)
+            animation_images = load_image_dataloader_on_RAM(root_dir=args.animation_image_dir, batch_size=args.batch_size)
+            edge_smoothed_images = load_image_dataloader_on_RAM(root_dir=args.edge_smoothed_image_dir, batch_size=args.batch_size)
 
         else:
-            photo_images = load_image_dataloader(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
-            animation_images = load_image_dataloader(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
-            edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
+            photo_images = load_image_dataloader(root_dir=args.photo_image_dir, batch_size=args.batch_size)
+            animation_images = load_image_dataloader(root_dir=args.animation_image_dir, batch_size=args.batch_size)
+            edge_smoothed_images = load_image_dataloader(root_dir=args.edge_smoothed_image_dir, batch_size=args.batch_size)
 
         print("Loading Trainer...")
         trainer = CycleGANTrainer(G, F, D_x, D_y, photo_images, animation_images,
@@ -172,15 +184,6 @@ def main():
         loss_cycle_hist, loss_identity_hist = trainer.train(num_epochs=args.num_epochs,
                                                             initialization_epochs=args.initialization_epochs,
                                                             save_path=args.model_save_path)
-
-        plt.plot(loss_D_x_hist, label='D_x loss')
-        plt.plot(loss_D_y_hist, label='D_y loss')
-        plt.plot(loss_G_GAN_hist, label='G loss')
-        plt.plot(loss_F_GAN_hist, label='F loss')
-        plt.plot(loss_cycle_hist, label='cycle loss')
-        plt.legend()
-        plt.savefig('CycleGAN_train_history.jpg')
-        plt.show()
 
 
 if __name__ == '__main__':

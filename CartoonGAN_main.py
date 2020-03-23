@@ -7,7 +7,6 @@ from config import CartoonGANConfig as Config
 from dataloader import load_image_dataloader
 
 import torch
-import matplotlib.pyplot as plt
 import argparse
 import torchvision.utils as tvutils
 import os
@@ -25,9 +24,21 @@ def get_args():
                         help='Path to saved model')
 
     parser.add_argument('--model_save_path',
-                        default=Config.model_save_path,
+                        default='checkpoints/CartoonGAN/',
                         help='Path to save trained model')
 
+    parser.add_argument("--photo_image_dir",
+                        default=Config.photo_image_dir,
+                        help="Path to photo images")
+    
+    parser.add_argument("--animation_image_dir",
+                        default=Config.animation_image_dir,
+                        help="Path to animation images")
+    
+    parser.add_argument("--edge_smoothed_image_dir",
+                        default=Config.edge_smoothed_image_dir,
+                        help="Path to edge smoothed animation images")
+    
     parser.add_argument('--test_image_path',
                         default=Config.test_photo_image_dir,
                         help='Path to test photo images')
@@ -41,6 +52,10 @@ def get_args():
                         type=int,
                         default=Config.num_epochs,
                         help='Number of training epochs')
+    
+    parser.add_argument("--batch_size",
+                        type=int,
+                        default=Config.batch_size)
 
     parser.add_argument('--use_modified_model',
                         action='store_true',
@@ -108,10 +123,8 @@ def main():
 
         print('Loading models...')
         load_generator(generator, args.model_path)
-        # Do testing stuff
-        # ex. generate image, compute fid score
-
-        test_images = load_image_dataloader(root_dir=args.test_image_path, batch_size=Config.batch_size * 2, shuffle=False)
+        
+        test_images = load_image_dataloader(root_dir=args.test_image_path, batch_size=args.batch_size * 2, shuffle=False)
 
         image_batch, _ = next(iter(test_images))
         image_batch = image_batch.to(Config.device)
@@ -121,10 +134,11 @@ def main():
         tvutils.save_image(image_batch, 'test_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
         tvutils.save_image(new_images, 'generated_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
 
-        if not os.path.isdir('generated_images'):
-            os.mkdir('generated_images')
         if not os.path.isdir('generated_images/CartoonGAN'):
-            os.mkdir('generated_images/CartoonGAN/')
+            os.makedirs('generated_images/CartoonGAN/')
+            
+        print("Generating Images")
+        # generate new images for all images in args.test_image_path, and save them to generated_images/CartoonGAN/ directory
         generate_and_save_images(generator, test_images, 'generated_images/CartoonGAN/')
 
     else:
@@ -135,9 +149,9 @@ def main():
         feature_extractor = FeatureExtractor().to(device)
 
         # load dataloaders
-        photo_images = load_image_dataloader(root_dir=Config.photo_image_dir, batch_size=Config.batch_size)
-        animation_images = load_image_dataloader(root_dir=Config.animation_image_dir, batch_size=Config.batch_size)
-        edge_smoothed_images = load_image_dataloader(root_dir=Config.edge_smoothed_image_dir, batch_size=Config.batch_size)
+        photo_images = load_image_dataloader(root_dir=args.photo_image_dir, batch_size=args.batch_size)
+        animation_images = load_image_dataloader(root_dir=args.animation_image_dir, batch_size=args.batch_size)
+        edge_smoothed_images = load_image_dataloader(root_dir=args.edge_smoothed_image_dir, batch_size=args.batch_size)
 
         print("Loading Trainer...")
         trainer = CartoonGANTrainer(generator, discriminator, feature_extractor, photo_images, animation_images,
@@ -149,13 +163,6 @@ def main():
         loss_D_hist, loss_G_hist, loss_content_hist = trainer.train(num_epochs=args.num_epochs,
                                                                     initialization_epochs=args.initialization_epochs,
                                                                     save_path=args.model_save_path)
-
-        plt.plot(loss_D_hist, label='Discriminator loss')
-        plt.plot(loss_G_hist, label='Generator loss')
-        plt.plot(loss_content_hist, label='Content loss')
-        plt.legend()
-        plt.savefig('CartoonGAN_train_history.jpg')
-        plt.show()
 
 
 if __name__ == '__main__':
