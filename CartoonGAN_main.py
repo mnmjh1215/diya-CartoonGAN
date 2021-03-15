@@ -86,15 +86,16 @@ def generate_and_save_images(generator, test_image_loader, save_path):
     ])
 
     image_ix = 0
-    for test_images, _ in test_image_loader:
-        test_images = test_images.to(Config.device)
-        generated_images = generator(test_images).detach().cpu()
+    with torch.no_grad():
+        for test_images, _ in test_image_loader:
+            test_images = test_images.to(Config.device)
+            generated_images = generator(test_images).detach().cpu()
 
-        for i in range(len(generated_images)):
-            image = generated_images[i]
-            image = torch_to_image(image)
-            image.save(os.path.join(save_path, '{0}.jpg'.format(image_ix)))
-            image_ix += 1
+            for i in range(len(generated_images)):
+                image = generated_images[i]
+                image = torch_to_image(image)
+                image.save(os.path.join(save_path, '{0}.jpg'.format(image_ix)))
+                image_ix += 1
 
 
 def main():
@@ -124,12 +125,14 @@ def main():
         print('Loading models...')
         load_generator(generator, args.model_path)
         
-        test_images = load_image_dataloader(root_dir=args.test_image_path, batch_size=args.batch_size * 2, shuffle=False)
+        test_images = load_image_dataloader(root_dir=args.test_image_path, batch_size=1, shuffle=False)
 
+        print("Generating sample images")
         image_batch, _ = next(iter(test_images))
         image_batch = image_batch.to(Config.device)
 
-        new_images = generator(image_batch).detach().cpu()
+        with torch.no_grad():
+            new_images = generator(image_batch).detach().cpu()
 
         tvutils.save_image(image_batch, 'test_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
         tvutils.save_image(new_images, 'generated_images.jpg', nrow=4, padding=2, normalize=True, range=(-1, 1))
